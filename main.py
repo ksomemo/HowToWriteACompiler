@@ -31,6 +31,7 @@ class Token:
     kind: str # "intliteral", "punct"
     value: str
 
+
 def read_number(char: str) -> str:
     number = [char]
     while True:
@@ -94,11 +95,16 @@ class Expr:
     intval: int # for intliteral
 
 
-def parse() -> Expr:
+def parse_unary_expr() -> Expr:
     token = get_token()
 
     intval = int(token.value)
     expr = Expr('intliteral', intval)
+    return expr
+
+
+def parse() -> Expr:
+    expr = parse_unary_expr()
     return expr
 
 
