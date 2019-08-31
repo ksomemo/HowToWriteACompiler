@@ -1,4 +1,5 @@
 import sys
+import dataclasses
 from typing import Optional
 
 source = ''
@@ -18,6 +19,12 @@ def get_char() -> Optional[str]:
 
 def unget_char() -> None:
     source_index -= 1
+
+
+@dataclasses.dataclass
+class Token:
+    kind: str # "intliteral"
+    value: str
 
 
 def main() -> None:
