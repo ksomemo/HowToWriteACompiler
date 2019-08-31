@@ -5,6 +5,7 @@ from typing import Optional, List
 
 source = ''
 source_index = 0
+tokens = []
 
 
 def get_char() -> Optional[str]:
@@ -82,7 +83,7 @@ class Expr:
 
 
 def main() -> None:
-    global source
+    global source, tokens
     source = sys.stdin.read() 
     tokens = tokenize()
     token = tokens[0]
