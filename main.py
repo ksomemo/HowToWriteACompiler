@@ -95,10 +95,11 @@ class Expr:
     """
     kind: str # "intliteral", "unary"
     intval: int = 0   # for intliteral
-    operator: str = '' # "-", "+"
+    operator: str = '' # "-", "+", ...
     # https://www.python.org/dev/peps/pep-0484/#forward-references
     operand: Optional['Expr'] = None # for unary expr
-
+    left: Optional['Expr'] = None # for binary expr
+    right: Optional['Expr'] = None # for binary expr
 
 def parse_unary_expr() -> Optional[Expr]:
     token = get_token()
@@ -118,7 +119,21 @@ def parse_unary_expr() -> Optional[Expr]:
 
 def parse() -> Expr:
     expr = parse_unary_expr()
-    return expr
+
+    while True:
+        token = get_token()
+        if token is None or token.value == ';':
+            return expr
+
+        if token.value in ['+', '-']:
+            left = expr
+            right = parse_unary_expr()
+            return Expr('binary',
+                        operator=token.value,
+                        left=left,
+                        right=right)
+        else:
+            return expr
 
 
 def generate_expr(expr: Expr) -> None:
@@ -131,6 +146,16 @@ def generate_expr(expr: Expr) -> None:
             print(f'  movq ${expr.operand.intval}, %rax')
         else:
             Exception(f'generator: Unknown unary operator: {expr.operator}')
+    elif expr.kind == 'binary':
+        print(f'  movq ${expr.left.intval}, %rax')
+        print(f'  movq ${expr.right.intval}, %rcx')
+
+        if expr.operator == '+':
+            print(f'  addq %rcx, %rax')
+        elif expr.operator == '-':
+            print(f'  subq %rcx, %rax')
+        else:
+            Exception(f'generator: Unknown binary operator: {expr.operator}')
     else:
         Exception(f'generator: Unknown expr.kind: {expr.kind}')
 
