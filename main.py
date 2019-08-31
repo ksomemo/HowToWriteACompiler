@@ -26,7 +26,7 @@ def unget_char() -> None:
 
 @dataclasses.dataclass
 class Token:
-    kind: str # "intliteral"
+    kind: str # "intliteral", "punct"
     value: str
 
 def read_number(char: str) -> str:
@@ -61,6 +61,10 @@ def tokenize() -> List[Token]:
             print(f" '{token.value}'")
         elif char in [' ', '\t', '\n']:
             continue
+        elif char == ';':
+            token = Token('punct', char)
+            tokens.append(token)
+            print(f" '{token.value}'")
         else:
             message = f"tokenizer: Invalid char: '{char}'"
             print(message, file=sys.stderr)
