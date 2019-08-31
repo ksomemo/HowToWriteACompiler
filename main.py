@@ -75,17 +75,24 @@ def tokenize() -> List[Token]:
     print()
     return tokens
 
+@dataclasses.dataclass
+class Expr:
+    kind: str # "intliteral"
+    intval: int # for intliteral
+
 
 def main() -> None:
     global source
     source = sys.stdin.read() 
     tokens = tokenize()
-    token0 = tokens[0]
-    number = int(token0.value)
+    token = tokens[0]
+
+    intval = int(token.value)
+    expr = Expr('intliteral', intval)
 
     print('  .global main')
     print('main:')
-    print(f'  movq ${number}, %rax')
+    print(f'  movq ${expr.intval}, %rax')
     print('  ret')
 
 
