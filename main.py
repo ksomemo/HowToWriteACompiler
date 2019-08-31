@@ -6,6 +6,7 @@ from typing import Optional, List
 source = ''
 source_index = 0
 tokens = []
+token_index = 0
 
 
 def get_char() -> Optional[str]:
@@ -76,14 +77,25 @@ def tokenize() -> List[Token]:
     print()
     return tokens
 
+
+def get_token() -> Token:
+    global tokens, token_index
+    if token_index == len(tokens):
+        return None
+
+    token = tokens[token_index]
+    token_index += 1
+    return token
+
+
 @dataclasses.dataclass
 class Expr:
     kind: str # "intliteral"
     intval: int # for intliteral
 
+
 def parse() -> Expr:
-    global tokens
-    token = tokens[0]
+    token = get_token()
 
     intval = int(token.value)
     expr = Expr('intliteral', intval)
