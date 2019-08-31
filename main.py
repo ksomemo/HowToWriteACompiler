@@ -69,11 +69,9 @@ def tokenize() -> List[Token]:
             tokens.append(token)
             print(f" '{token.value}'", end='')
         else:
-            message = f"tokenizer: Invalid char: '{char}'"
-            print(message, file=sys.stderr)
+            Exception(f"tokenizer: Invalid char: '{char}'")
             # golang panic: output exit status 2 to stderr
             # but, $? is 1
-            sys.exit(1)
 
     print()
     return tokens
@@ -133,7 +131,7 @@ def parse() -> Expr:
                         left=left,
                         right=right)
         else:
-            return expr
+            Exception(f'unexpected token: {token.value}')
 
 
 def generate_expr(expr: Expr) -> None:
