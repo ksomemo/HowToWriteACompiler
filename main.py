@@ -64,7 +64,7 @@ def tokenize() -> List[Token]:
             print(f" '{token.value}'")
         elif char in [' ', '\t', '\n']:
             continue
-        elif char == ';':
+        elif char in [';', '+', '-']:
             token = Token('punct', char)
             tokens.append(token)
             print(f" '{token.value}'")
@@ -91,16 +91,29 @@ def get_token() -> Token:
 
 @dataclasses.dataclass
 class Expr:
-    kind: str # "intliteral"
-    intval: int # for intliteral
+    """golang のstruct に合わせてdefault 設定
+    """
+    kind: str # "intliteral", "unary"
+    intval: int = 0   # for intliteral
+    operator: str = '' # "-", "+"
+    # https://www.python.org/dev/peps/pep-0484/#forward-references
+    operand: Optional['Expr'] = None # for unary expr
 
 
-def parse_unary_expr() -> Expr:
+def parse_unary_expr() -> Optional[Expr]:
     token = get_token()
 
-    intval = int(token.value)
-    expr = Expr('intliteral', intval)
-    return expr
+    if token.kind == 'intliteral':
+        intval = int(token.value)
+        return Expr('intliteral', intval=intval)
+    elif token.kind == 'punct':
+        operator = token.value
+        operand = parse_unary_expr()
+        return Expr('unary',
+                    operator=operator,
+                    operand=operand)
+    else:
+        return None
 
 
 def parse() -> Expr:
@@ -109,7 +122,17 @@ def parse() -> Expr:
 
 
 def generate_expr(expr: Expr) -> None:
-    print(f'  movq ${expr.intval}, %rax')
+    if expr.kind == 'intliteral':
+        print(f'  movq ${expr.intval}, %rax')
+    elif expr.kind == 'unary':
+        if expr.operator == '-':
+            print(f'  movq $-{expr.operand.intval}, %rax')
+        elif '+':
+            print(f'  movq ${expr.operand.intval}, %rax')
+        else:
+            Exception(f'generator: Unknown unary operator: {expr.operator}')
+    else:
+        Exception(f'generator: Unknown expr.kind: {expr.kind}')
 
 
 def generate_code(expr: Expr) -> None:
