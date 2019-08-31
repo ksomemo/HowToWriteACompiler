@@ -81,20 +81,28 @@ class Expr:
     kind: str # "intliteral"
     intval: int # for intliteral
 
+def parse() -> Expr:
+    global tokens
+    token = tokens[0]
+
+    intval = int(token.value)
+    expr = Expr('intliteral', intval)
+    return expr
+
+
+def generate(expr: Expr) -> None:
+    print('  .global main')
+    print('main:')
+    print(f'  movq ${expr.intval}, %rax')
+    print('  ret')
+
 
 def main() -> None:
     global source, tokens
     source = sys.stdin.read() 
     tokens = tokenize()
-    token = tokens[0]
-
-    intval = int(token.value)
-    expr = Expr('intliteral', intval)
-
-    print('  .global main')
-    print('main:')
-    print(f'  movq ${expr.intval}, %rax')
-    print('  ret')
+    expr = parse()
+    generate(expr)
 
 
 if __name__ == '__main__':
