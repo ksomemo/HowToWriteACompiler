@@ -59,6 +59,8 @@ def tokenize() -> List[Token]:
             token = Token('intliteral', intliteral)
             tokens.append(token)
             print(f" '{token.value}'")
+        elif char in [' ', '\t', '\n']:
+            continue
         else:
             message = f"tokenizer: Invalid char: '{char}'"
             print(message, file=sys.stderr)
