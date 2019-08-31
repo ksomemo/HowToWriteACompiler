@@ -61,13 +61,13 @@ def tokenize() -> List[Token]:
             intliteral = read_number(char)
             token = Token('intliteral', intliteral)
             tokens.append(token)
-            print(f" '{token.value}'")
+            print(f" '{token.value}'", end='')
         elif char in [' ', '\t', '\n']:
             continue
         elif char in [';', '+', '-']:
             token = Token('punct', char)
             tokens.append(token)
-            print(f" '{token.value}'")
+            print(f" '{token.value}'", end='')
         else:
             message = f"tokenizer: Invalid char: '{char}'"
             print(message, file=sys.stderr)
