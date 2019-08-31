@@ -1,7 +1,13 @@
+import sys
+
+
 def main():
+    source = sys.stdin.read() 
+    number = int(source)
+
     print('  .global main')
     print('main:')
-    print('  movq $42, %rax')
+    print(f'  movq ${number}, %rax')
     print('  ret')
 
 
