@@ -69,7 +69,7 @@ Parser analyzes stream of tokens, and composes a tree of nested structs , which 
 
 This tree is called AST (Abstract Syntax Tree).
 
-The function `parser()` does this task.
+The function `parse()` does this task.
 
 ## Code Generator
 
@@ -79,7 +79,7 @@ Code generator converts AST into target language code.
 
 In this compiler, the target language is GAS(GNU Assembly) for X86-64 linux.
 
-The function `generateCode()` does this task.
+The function `generate_code()` does this task.
 
 # How to run unit tests
 
