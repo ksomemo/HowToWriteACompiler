@@ -69,7 +69,7 @@ def tokenize() -> List[Token]:
             tokens.append(token)
             print(f" '{token.value}'", end='')
         else:
-            Exception(f"tokenizer: Invalid char: '{char}'")
+            raise Exception(f"tokenizer: Invalid char: '{char}'")
             # golang panic: output exit status 2 to stderr
             # but, $? is 1
 
@@ -112,7 +112,7 @@ def parse_unary_expr() -> Optional[Expr]:
                     operator=operator,
                     operand=operand)
     else:
-        return None
+        raise Exception('Unexpected token')
 
 
 def parse() -> Expr:
@@ -131,7 +131,7 @@ def parse() -> Expr:
                         left=left,
                         right=right)
         else:
-            Exception(f'unexpected token: {token.value}')
+            raise Exception(f'unexpected token: {token.value}')
 
 
 def generate_expr(expr: Expr) -> None:
@@ -143,7 +143,7 @@ def generate_expr(expr: Expr) -> None:
         elif '+':
             print(f'  movq ${expr.operand.intval}, %rax')
         else:
-            Exception(f'generator: Unknown unary operator: {expr.operator}')
+            raise Exception(f'generator: Unknown unary operator: {expr.operator}')
     elif expr.kind == 'binary':
         print(f'  movq ${expr.left.intval}, %rax')
         print(f'  movq ${expr.right.intval}, %rcx')
@@ -158,9 +158,9 @@ def generate_expr(expr: Expr) -> None:
             print('  movq $0, %rdx')
             print('  idiv %rcx')
         else:
-            Exception(f'generator: Unknown binary operator: {expr.operator}')
+            raise Exception(f'generator: Unknown binary operator: {expr.operator}')
     else:
-        Exception(f'generator: Unknown expr.kind: {expr.kind}')
+        raise Exception(f'generator: Unknown expr.kind: {expr.kind}')
 
 
 def generate_code(expr: Expr) -> None:
