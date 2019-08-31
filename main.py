@@ -106,11 +106,9 @@ def parse_unary_expr() -> Optional[Expr]:
         intval = int(token.value)
         return Expr('intliteral', intval=intval)
     elif token.kind == 'punct':
-        operator = token.value
-        operand = parse_unary_expr()
         return Expr('unary',
-                    operator=operator,
-                    operand=operand)
+                    operator=token.value,
+                    operand=parse_unary_expr())
     else:
         raise Exception('Unexpected token')
 
@@ -124,12 +122,10 @@ def parse() -> Expr:
             return expr
 
         if token.value in ['+', '-', '*', '/']:
-            left = expr
-            right = parse_unary_expr()
             return Expr('binary',
                         operator=token.value,
-                        left=left,
-                        right=right)
+                        left=expr,
+                        right=parse_unary_expr())
         else:
             raise Exception(f'unexpected token: {token.value}')
 
