@@ -64,7 +64,7 @@ def tokenize() -> List[Token]:
             print(f" '{token.value}'", end='')
         elif char in [' ', '\t', '\n']:
             continue
-        elif char in [';', '+', '-', '*']:
+        elif char in [';', '+', '-', '*', '/']:
             token = Token('punct', char)
             tokens.append(token)
             print(f" '{token.value}'", end='')
@@ -125,7 +125,7 @@ def parse() -> Expr:
         if token is None or token.value == ';':
             return expr
 
-        if token.value in ['+', '-', '*']:
+        if token.value in ['+', '-', '*', '/']:
             left = expr
             right = parse_unary_expr()
             return Expr('binary',
@@ -156,6 +156,9 @@ def generate_expr(expr: Expr) -> None:
             print('  subq %rcx, %rax')
         elif expr.operator == '*':
             print('  imulq %rcx, %rax')
+        elif expr.operator == '/':
+            print('  movq $0, %rdx')
+            print('  idiv %rcx')
         else:
             Exception(f'generator: Unknown binary operator: {expr.operator}')
     else:
