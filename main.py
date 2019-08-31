@@ -90,10 +90,14 @@ def parse() -> Expr:
     return expr
 
 
-def generate(expr: Expr) -> None:
+def generate_expr(expr: Expr) -> None:
+    print(f'  movq ${expr.intval}, %rax')
+
+
+def generate_code(expr: Expr) -> None:
     print('  .global main')
     print('main:')
-    print(f'  movq ${expr.intval}, %rax')
+    generate_expr(expr)
     print('  ret')
 
 
@@ -102,7 +106,7 @@ def main() -> None:
     source = sys.stdin.read() 
     tokens = tokenize()
     expr = parse()
-    generate(expr)
+    generate_code(expr)
 
 
 if __name__ == '__main__':
