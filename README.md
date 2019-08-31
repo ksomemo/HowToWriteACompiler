@@ -1,6 +1,7 @@
 # How to write a compiler from scratch in 30 minutes
+This repository explains how to write a compiler from scratch by Python.
 
-This repository explains how to write a compiler from scratch by Go.
+Original repository is <https://github.com/DQNEO/HowToWriteACompiler>.
 
 The compiler has some constraints
 
@@ -20,7 +21,7 @@ And then you can use the compiler.
 
 
 ```
-$ echo '30 + 12' | go run main.go
+$ echo '30 + 12' | python main.py
 ```
 
 This program receives source code from stdin, and emits assembly code to stdout.
@@ -28,13 +29,13 @@ This program receives source code from stdin, and emits assembly code to stdout.
 If you want to compile and run at once, `asrun` script helps you.
 
 ```
-$ echo '30 + 12' | go run main.go | ./asrun
+$ echo '30 + 12' | python main.py | ./asrun
 ```
 
 `asrun` takes assembly code from stdin and executes it while displaying the code and the resulting status code.
 
 ```
-$ echo  '30 + 12' | go run main.go | ./asrun
+$ echo  '30 + 12' | python main.py | ./asrun
 -------- a.s ----------------
   .global main
 main:
@@ -88,7 +89,7 @@ $ ./test.sh
 
 # SEE ALSO
 
-This project is based on the history of my Go compiler.
+This project is based on the history of @DQNEO Go compiler.
 
 https://github.com/DQNEO/minigo
 
